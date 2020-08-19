@@ -43,11 +43,11 @@ module.exports = function (RED) {
         const r = await Promise.race([
           fetch(this.url),
           new Promise((resolve, reject) =>
-            setTimeout(() => reject(new Error('Url request timeout')), 10000)
+            setTimeout(() => reject(new Error('Url request timeout')), 5000)
           )
         ])
         const requestData = await r.json()
-        if (requestData[0].error) {
+        if (Array.isArray(requestData) && 'error' in requestData[0]) {
           throw new Error(requestData[0].error.description)
         }
         let i = 0 // Used to keep track of amount of request to the Hue bridge during this cycle
