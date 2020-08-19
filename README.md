@@ -3,7 +3,13 @@ Node-RED node automatic change white color temperature of lights as the day prog
 
 A tiny script just to give you a feeling of varying daylight. It's used to take advantage of a function that can be automated for the connected lights. 
 
-Give the node an input every so often to make it do its thing. Eg. every 15 minutes seams to work good. Also i recommend sending a ``msg.reset`` once a day, eg. at night, to overrule any manually changed lamps back to having its color temperature automated.
+## What is tunable white
+*Aliases: 'tunable white', 'dynamic white', 'tunable dynamic white', 'kelvin changing'*
+
+Its the possibility to change the 'color' of the white light according to the colors of the sun **automatically**. From the light orange shine at the morning and evening to the blueish light at midday. Basically to simulate daylight even if you don't go outside or during winter when daylight is scares.
+
+## Usage
+Give the node an input every so often to make it do its thing. Eg. every 15 minutes seams to work good. Also i recommend sending a ``msg.reset`` once a day, eg. at night, to overrule any manually changed lights back to having its color temperature automated.
 
 *I'm using this script to fight of winter depression, and it has been running successfully in my home for some time now, since winter 2016*
 
@@ -22,15 +28,14 @@ The graph below shows how the color will change according to the current hour.
 
 ![alt](./img/graph.png)
 
-# Supported devices
+# Requirements
+Requires a Hue Bridge and for you to grab a API key from it:
+[Official guide to getting the API key (aka. *username*)](https://developers.meethue.com/develop/get-started-2/)
+
+## Supported devices
 Tested with these lights:
 * Philips hue white ambiance
 * Philips hue color
 * Osram LIGHTIFY
 
 *Not tested with lights that only does dimming, as I don't got access to any*
-
-
-## Requirements
-Requires a Hue Bridge and for you to grab a API key from it:
-[Official guide to getting the API key (aka. *username*)](https://developers.meethue.com/develop/get-started-2/)
