@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-hue-tunable-white",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Node-RED node automatic change white color temperature of lights as the day progress.",
   "main": "tunable-white.js",
   "scripts": {
@@ -13,7 +13,9 @@
     "tunable white",
     "daylight",
     "philips hue",
-    "dynamic white"
+    "dynamic white",
+    "daylight",
+    "daylight simulator"
   ],
   "node-red": {
     "nodes": {
