@@ -1,18 +1,18 @@
 <script type="text/javascript">
-    RED.nodes.registerType('tunable-white',{
-        category: 'network',
+    RED.nodes.registerType('tunable-white', {
+        category: 'homesmart',
         color: '#94c1d0',
         defaults: {
-            url: {value:"", required:true},
-            key: {value:"", required:true},
+            url: { value: "", required: true },
+            key: { value: "", required: true },
         },
-        inputs:1,
-        outputs:1,
+        inputs: 1,
+        outputs: 1,
         icon: "light.svg",
-        label: function() {
-            return this.name||"tunable white";
+        label: function () {
+            return this.name || "tunable white"
         }
-    });
+    })
 </script>
 
 <script type="text/html" data-template-name="tunable-white">
@@ -21,10 +21,10 @@
         <input type="text" id="node-input-url" placeholder="Eg. 192.168.0.45">
     </div>
     <div class="form-row">
-        <label for="node-input-key"><i class="fa fa-key"></i> API Key(user)</label>
+        <label for="node-input-key"><i class="fa fa-key"></i> API key (username)</label>
         <input type="text" id="node-input-key" placeholder="Eg. Xyewrasd324235tgh34213xSGR">
     </div>
-    <div class="form-tips"><b>Tip:</b> If you don't got an API key, you should google how to. Start by opening the Bridge console here: https://192.168.0.45/debug/clip.html </div>
+    <div class="form-tips"><b>Tip:</b> To get an API key follow Philips' <a href="https://developers.meethue.com/develop/get-started-2/">official guide to getting the API key</a> (aka. *username*)</div>
 </script>
 
 <script type="text/html" data-help-name="tunable-white">
@@ -33,10 +33,10 @@
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>msg.reset
-            <span class="property-type">boolean (200-400)</span>
+            <span class="property-type">boolean</span>
         </dt>
         <dd>
-            <code>= True</code> will force all light to update now no matter their current color. Its a good practice to run this once a day.
+            <code>= true</code> will force all lights to update now no matter their current color. Its a good practice to run this once a day.
         </dd>
     </dl>
     <h3>Outputs</h3>
@@ -45,25 +45,25 @@
             <span class="property-type">number (200-400)</span>
         </dt>
         <dd>
-            The new color temperature sent to the lights. Based on the what Philips Hue API <code>ct</code> color.
+            The new color temperature sent to the lights. For more info see Philips Hue API calls about <code>ct</code> value.
         </dd>
-        <dt>payload.bulbChanged
+        <dt>payload.lightChanged
             <span class="property-type">array</span>
         </dt>
         <dd>
             Array of reachable lights that was changed in color. (All reachable light is changed at first run). 
         </dd>
-        <dt>payload.bulbNotChanged
+        <dt>payload.lightNotChanged
             <span class="property-type">array</span>
         </dt>
         <dd>
-            Array of reachable lights that was not changed in color, possible because they had been manually changed to another color then the default one.
+            Array of reachable lights that was not changed in color, possible because they had been manually changed to another color then the default one. <i>Unreachable/offline lights are not listed here.</i>
         </dd>
         <dt>time
             <span class="property-type">string</span>
         </dt>
         <dd>
-            Server time, as seen by node-red. If wrong update timezone of installation.
+            Server time in 24h format, as seen by node-red. If wrong update timezone of installation.
         </dd>
     </dl>
 </script>
