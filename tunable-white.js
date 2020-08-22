@@ -1,5 +1,4 @@
 module.exports = function (RED) {
-  'use strict'
   const fetch = require('node-fetch')
   function TunableWhiteNode (config) {
     RED.nodes.createNode(this, config)
