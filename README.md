@@ -1,4 +1,8 @@
 # node-red-contrib-hue-tunable-white
+[![Platform](https://img.shields.io/badge/platform-Node--RED-red)](https://nodered.org)
+[![NPM Total Downloads](https://img.shields.io/npm/dt/node-red-contrib-hue-tunable-white.svg)](https://www.npmjs.com/package/node-red-contrib-hue-tunable-white)
+[![Dependencies](https://img.shields.io/david/zinen/node-red-contrib-hue-tunable-white.svg)](https://github.com/zinen/node-red-contrib-hue-tunable-white)
+
 Node-RED node automatic change white color temperature of lights as the day progress.
 
 A tiny script just to give you a feeling of varying daylight. It's used to increase mental health for people, in this modern world, spending too much time inside. 
