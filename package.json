@@ -4,7 +4,7 @@
   "description": "Node-RED node automatic change white color temperature of lights as the day progress.",
   "main": "tunable-white.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\""
   },
   "author": "zinen",
   "license": "MIT",
@@ -31,5 +31,9 @@
   },
   "bugs": {
     "url": "https://github.com/zinen/node-red-contrib-hue-tunable-white/issues"
-  }
+  },
+  "files": [
+    "tunable-white.html",
+    "examples/"
+  ]
 }
