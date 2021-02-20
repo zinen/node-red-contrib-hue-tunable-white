@@ -1,5 +1,6 @@
 module.exports = function (RED) {
   const fetch = require('node-fetch')
+  const { createModel } = require('polynomial-regression')
   function TunableWhiteNode (config) {
     RED.nodes.createNode(this, config)
 
@@ -7,6 +8,16 @@ module.exports = function (RED) {
     this.lastColor = 0
     this.forceRun = true
     var node = this
+    this.dataModel = [
+      [config.dataPoint1Hour || 7, config.dataPoint1CT || 400],
+      [config.dataPoint2Hour || 14, config.dataPoint2CT || 210],
+      [config.dataPoint3Hour || 21, config.dataPoint3CT || 400]
+    ]
+    this.model = createModel()
+    this.model.fit(this.dataModel, [2])
+
+    this.CTMin = config.CTMin || 200
+    this.CTMax = config.CTMax || 400
 
     async function delay (msSec) {
       return new Promise(resolve => {
@@ -30,19 +41,28 @@ module.exports = function (RED) {
         if (msg.reset === true) {
           this.forceRun = true
         }
-        // Insert equation from calculated graph below, y = 3,125x2 - 87,5x + 812,5:
-        let calculatedTemperature = Math.floor(3.125 * convertedTime ** 2 - 87.5 * convertedTime + 812)
-        if (calculatedTemperature < 200) {
-          // Don't use lower color temperature value then 200
-          calculatedTemperature = 200
-        } else if (calculatedTemperature > 400) {
-          // Don't use higher color temperature value then 400
-          calculatedTemperature = 400
+        // if (msg.newColor) {
+        if (msg.newColor && !parseInt(msg.newColor)) {
+          throw new Error('New color input is not a number')
+        }
+        // this.colorNew =
+        // } else {
+        // Insert equation to calculate color now based on current time
+        this.colorNew = msg.newColor || Math.floor(this.model.estimate(2, convertedTime))
+        // }
+
+        if (this.colorNew < this.CTMin) {
+          // Don't use lower color temperature value then (default 200)
+          this.colorNew = this.CTMin
+        } else if (this.colorNew > this.CTMax) {
+          // Don't use higher color temperature value then (default 400)
+          this.colorNew = this.CTMax
         }
         // Lamp data settings, bri = 1 -254, ct= 153-454
         // ct value lower then 190 does not seem to effect Osram LIGHTIFY
         // transition time of 5 seconds seams to look nice and is still quick
-        const dataCycle = { ct: calculatedTemperature, transitiontime: 50 }
+        const dataCycle = { ct: this.colorNew, transitiontime: 50 }
+
         // Make a promise race to make sure longest timeout for fetching data is defined.
         // as the Hue Bridge in most cases is installed on the local LAN a short timeout is used.
         const r = await Promise.race([
@@ -54,6 +74,7 @@ module.exports = function (RED) {
         const requestData = await r.json()
         // Hue Bridge normally reply with and JSON object. But in case of errors it returns an array
         if (Array.isArray(requestData) && 'error' in requestData[0]) {
+          this.status({ fill: 'red', shape: 'ring', text: 'bridge error' })
           // In case of error from Hue Bridge, throw its description
           throw new Error(requestData[0].error.description)
         }
@@ -63,12 +84,12 @@ module.exports = function (RED) {
         // Looks if light is reachable and in white mode(eg. not colored).
           if (requestData[k].state.reachable === true && requestData[k].state.colormode === 'ct') {
             const ctState = requestData[k].state.ct
-            // Look to see if color should change:
+            // Look to see if color should change. This means that if someone has changed a bulb this script won't change it.
             // If 366 = Philips Hue light default color, then change
             // If 370 = Osram LIGHTIFY light default color, then change
-            // If color(ctState) same as last ordered color, then change
-            // If light already is the desired, don't change
-            if (this.forceRun === true || (((ctState === 366) || (ctState === 370) || (ctState === this.lastColor)) && (ctState !== calculatedTemperature))) {
+            // If current color (ctState) is the same as last ordered color, then change
+            // If light already is the desired color, don't change
+            if (this.forceRun === true || (((ctState === 366) || (ctState === 370) || (ctState === this.colorLast)) && (ctState !== this.colorNew))) {
               i = i + 1
               // Fetch, but don't await since the reply is not relevant
               fetch(this.url + String(k) + '/state/', {
@@ -87,17 +108,21 @@ module.exports = function (RED) {
             }
           }
         }
-        this.lastColor = calculatedTemperature
+        this.colorLast = this.colorNew
+        delete this.colorNew
       } catch (error) {
+        this.status({ fill: 'red', shape: 'ring', text: 'error' })
         done(error.message)
         return
       }
-
       // Clears force run flag
       if (this.forceRun) {
         this.forceRun = false
       }
-      msg.payload = { newColor: this.lastColor, lightChanged: lightChanged, lightNotChanged: lightNotChanged }
+      msg.newColor = this.colorLast
+      msg.payload = { lightChanged: lightChanged, lightNotChanged: lightNotChanged }
+      // Clear node status
+      this.status({ text: '' })
       send(msg)
       // Listener used in Node-RED 1.0.0 >
       done()

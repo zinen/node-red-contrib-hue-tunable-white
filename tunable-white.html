@@ -5,6 +5,14 @@
         defaults: {
             url: { value: "", required: true },
             key: { value: "", required: true },
+            dataPoint1Hour: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 0) && (v <= 23))) }},
+            dataPoint1CT: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }},
+            dataPoint2Hour: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 0) && (v <= 23))) }},
+            dataPoint2CT: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }},
+            dataPoint3Hour: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 0) && (v <= 23))) }},
+            dataPoint3CT: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }},
+            CTMax: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }},
+            CTMin: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }}
         },
         inputs: 1,
         outputs: 1,
@@ -24,7 +32,44 @@
         <label for="node-input-key"><i class="fa fa-key"></i> API key (username)</label>
         <input type="text" id="node-input-key" placeholder="Eg. Xyewrasd324235tgh34213xSGR">
     </div>
-    <div class="form-tips"><b>Tip:</b> To get an API key follow Philips' <a href="https://developers.meethue.com/develop/get-started-2/">official guide to getting the API key</a> (aka. *username*)</div>
+    <div class="form-tips">
+        <span><b>Tip:</b> To get an API key follow Philips' <a href="https://developers.meethue.com/develop/get-started-2/">official guide to getting the API key</a> (aka. *username*)</span>
+    </div>
+    <div class="form-row">
+        <span><b>Advanced optional settings.</b></span>
+    </div>
+    <div class="form-row">
+        <div style="margin-top: 10px; width: 500px;">
+            Define a hour of the day as a whole number and a color temperature for that hour.
+            Hour = 0-23 and/or color temperature(CT) = 153-454. CT 400=orange/night lighting and 200=blueish/midday lightning.
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <label>Data point 1</label>
+        <span>hour</span>: <input type="number" id="node-input-dataPoint1Hour" style="width:100px;" autocomplete="off" placeholder="7 (7 am)">
+        &nbsp;&nbsp;
+        <span>CT</span>: <input type="number" id="node-input-dataPoint1CT" style="width:100px;" autocomplete="off" placeholder="400">
+    </div>
+    <div class="form-row">
+        <label>Data point 2</label>
+        <span>hour</span>: <input type="number" id="node-input-dataPoint2Hour" style="width:100px;" autocomplete="off" placeholder="14 (2 pm)">
+        &nbsp;&nbsp;
+        <span>CT</span>: <input type="number" id="node-input-dataPoint2CT" style="width:100px;" autocomplete="off" placeholder="210">
+    </div>
+    <div class="form-row">
+        <label>Data point 3</label>
+        <span>hour</span>: <input type="number" id="node-input-dataPoint3Hour" style="width:100px;" autocomplete="off" placeholder="21 (9 pm)">
+        &nbsp;&nbsp;
+        <span>CT</span>: <input type="number" id="node-input-dataPoint3CT" style="width:100px;" autocomplete="off" placeholder="400">
+    </div>
+    <div class="form-row">
+        <label>Color temperature max/min</label>
+        <span>min</span>: <input type="number" id="node-input-CTMin" style="width:100px;" autocomplete="off" placeholder="200">
+        &nbsp;&nbsp;
+        <span>max</span>: <input type="number" id="node-input-CTMax" style="width:100px;" autocomplete="off" placeholder="400">
+    </div>
 </script>
 
 <script type="text/html" data-help-name="tunable-white">
@@ -32,17 +77,23 @@
     <p>Accepts any input to make it run.</p>
     <h3>Inputs</h3>
     <dl class="message-properties">
-        <dt>msg.reset
+        <dt>reset
             <span class="property-type">boolean</span>
         </dt>
         <dd>
-            <code>= true</code> will force all lights to update now no matter their current color. Its a good practice to run this once a day.
+            <code>true</code> will force all lights to update now no matter their current color. Its a good practice to run this once a day.
+        </dd>
+        <dt>newColor
+            <span class="property-type">number (154-454)</span>
+        </dt>
+        <dd>
+            Request a specific <code>ct</code> value. This will obey the the max and min ct settings define in node advance setting.
         </dd>
     </dl>
     <h3>Outputs</h3>
     <dl class="message-properties">
-        <dt>payload.newColor
-            <span class="property-type">number (200-400)</span>
+        <dt>newColor
+            <span class="property-type">number (154-454)</span>
         </dt>
         <dd>
             The new color temperature sent to the lights. For more info see Philips Hue API calls about <code>ct</code> value.
