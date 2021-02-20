@@ -22,15 +22,18 @@ In Node-RED editor, click menu at top right corner -> Import -> Examples -> node
 At first run all lights are controlled to the right color temperature for the current time. Once this first run is completed the node will do a more careful update of the color temperature.
 It will only change the color if the lights currently has the default startup color temperature or has the value has this node specified last. This means you can still change you lights and this node will respect that you manually took control of the light. If you turn your lights on and off from the mains this is also handled just fine if you lights startup with its standard value.
 
+![Edit dialog image](./img/edit-dialog.jpg)
 ## Calculating the color
 The node will use system time of the server to do a calculation of the color. A caveat to only relying on time is the color does not follow the real state of the sun at your location, as I found it more usable to control the light according to a fix schema.
 
-So this is how its calculated:
-At 6:00 and again at 22:00 the color will be the most orange. At 14:00 the color will be white-blueish.
+So this is how its calculated pr default settings:
+At 7:00 and again at 21:00 the color will be the most orange. At 14:00 the color will be white-blueish.
 
 The graph below shows how the color will change according to the current hour.
 
 ![Graph](./img/graph.png)
+
+You can change the setting by defining your own data point in the edit dialog. 
 
 # Requirements
 Requires a Hue Bridge and for you to grab a API key from it:
