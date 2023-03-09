@@ -50,7 +50,7 @@ module.exports = function (RED) {
         if (colorNew < this.CTMin) {
           colorNew = this.CTMin
         } else if (colorNew > this.CTMax) {
-          colorNew = CTMax
+          colorNew = this.CTMax
         }
         // Lamp data settings, bri = 1 -254, ct= 153-500
         // ct value lower then 190 does not seem to effect Osram LIGHTIFY
