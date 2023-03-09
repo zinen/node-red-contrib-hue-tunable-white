@@ -6,13 +6,13 @@
             url: { value: "", required: true },
             key: { value: "", required: true },
             dataPoint1Hour: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 0) && (v <= 23))) }},
-            dataPoint1CT: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }},
+            dataPoint1CT: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 500))) }},
             dataPoint2Hour: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 0) && (v <= 23))) }},
-            dataPoint2CT: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }},
+            dataPoint2CT: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 500))) }},
             dataPoint3Hour: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 0) && (v <= 23))) }},
-            dataPoint3CT: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }},
-            CTMax: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }},
-            CTMin: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 454))) }}
+            dataPoint3CT: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 500))) }},
+            CTMax: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 500))) }},
+            CTMin: { value: "", required: false, validate:function(v) { return ((v === "") || (RED.validators.number(v) && (v >= 153) && (v <= 500))) }}
         },
         inputs: 1,
         outputs: 1,
@@ -41,10 +41,12 @@
     <div class="form-row">
         <div style="margin-top: 10px; width: 500px;">
             Define a hour of the day as a whole number and a color temperature for that hour.
-            Hour = 0-23 and/or color temperature(CT) = 153-454. CT 400=orange/night lighting and 200=blueish/midday lightning.
+            Hour = 0-23 and/or color temperature(CT) = 153-500. CT 400=orange/night lighting and 200=blueish/midday lightning.
+        </div>
+        <div style="margin-top: 0px; width: 500px;">
+            <i>Some bulbs have a reduced actual level of change of CT values. ct value of=190-454 seems to give the right light tones on multible bulbs compared and is therfore recommended as a min/max value.</i>
         </div>
     </div>
-
 
     <div class="form-row">
         <label>Data point 1</label>
@@ -56,7 +58,7 @@
         <label>Data point 2</label>
         <span>hour</span>: <input type="number" id="node-input-dataPoint2Hour" style="width:100px;" autocomplete="off" placeholder="14 (2 pm)">
         &nbsp;&nbsp;
-        <span>CT</span>: <input type="number" id="node-input-dataPoint2CT" style="width:100px;" autocomplete="off" placeholder="210">
+        <span>CT</span>: <input type="number" id="node-input-dataPoint2CT" style="width:100px;" autocomplete="off" placeholder="200">
     </div>
     <div class="form-row">
         <label>Data point 3</label>
@@ -66,9 +68,9 @@
     </div>
     <div class="form-row">
         <label>Color temperature limits</label>
-        <span>min</span>: <input type="number" id="node-input-CTMin" style="width:100px;" autocomplete="off" placeholder="200">
+        <span>min</span>: <input type="number" id="node-input-CTMin" style="width:100px;" autocomplete="off" placeholder="195">
         &nbsp;&nbsp;
-        <span>max</span>: <input type="number" id="node-input-CTMax" style="width:100px;" autocomplete="off" placeholder="400">
+        <span>max</span>: <input type="number" id="node-input-CTMax" style="width:100px;" autocomplete="off" placeholder="410">
     </div>
 </script>
 
@@ -84,7 +86,7 @@
             <code>true</code> will force all lights to update now no matter their current color. Its a good practice to run this once a day.
         </dd>
         <dt>newColor
-            <span class="property-type">number (154-454)</span>
+            <span class="property-type">number (154-500)</span>
         </dt>
         <dd>
             Request a specific <code>ct</code> value. This will obey the the max and min ct settings define in node advance setting.
@@ -93,7 +95,7 @@
     <h3>Outputs</h3>
     <dl class="message-properties">
         <dt>newColor
-            <span class="property-type">number (154-454)</span>
+            <span class="property-type">number (154-500)</span>
         </dt>
         <dd>
             The new color temperature sent to the lights. For more info see Philips Hue API calls about <code>ct</code> value.
