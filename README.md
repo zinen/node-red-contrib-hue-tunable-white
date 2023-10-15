@@ -29,7 +29,7 @@ The node will use system time of the server to do a calculation of the color. A 
 So this is how its calculated pr default settings:
 At 7:00 and again at 21:00 the color will be the most orange. At 14:00 the color will be white-blueish.
 
-CT aka Color temperatur... or more precise Color temperature represented as a Mired value [wiki for Mired](https://en.wikipedia.org/wiki/Mired). The Micred value is calculated like so: CT(Mired) = 1000000 / CT(Kelvin). So a kelvin color of 2700K is (1000000 / 2700) = CT(Mired) value of 370 on the brige.
+CT aka Color temperature... or more precise Color temperature represented as a Mired value [wiki for Mired](https://en.wikipedia.org/wiki/Mired). The Mired value is calculated like so: CT(Mired) = 1000000 / CT(Kelvin). So a kelvin color of 2700K is (1000000 / 2700) = CT(Mired) value of 370 on the bridge.
 
 The graph below shows how the color will change according to the current hour.
 
@@ -42,9 +42,8 @@ Requires a Hue Bridge and for you to grab a API key from it:
 [Official guide to getting the API key (aka. *username*)](https://developers.meethue.com/develop/get-started-2/)
 
 ## Supported devices
-Tested with these lights\*:
+Tested with these lights:
 * Philips hue white ambiance
 * Philips hue color
 * Osram LIGHTIFY
-
-*\*Not tested with lights that only does dimming as I don't got access to any*
+* Is ignored: Philips hue white (an only dimable version, no white hue changes)
