@@ -29,6 +29,8 @@ The node will use system time of the server to do a calculation of the color. A 
 So this is how its calculated pr default settings:
 At 7:00 and again at 21:00 the color will be the most orange. At 14:00 the color will be white-blueish.
 
+CT aka Color temperatur... or more precise Color temperature represented as a Mired value [wiki for Mired](https://en.wikipedia.org/wiki/Mired). The Micred value is calculated like so: CT(Mired) = 1000000 / CT(Kelvin). So a kelvin color of 2700K is (1000000 / 2700) = CT(Mired) value of 370 on the brige.
+
 The graph below shows how the color will change according to the current hour.
 
 ![Graph](./img/graph.png)
